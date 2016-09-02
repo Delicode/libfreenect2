@@ -50,6 +50,7 @@ in vec2 TexCoord;
 void main(void)
 {
   ivec2 uv = ivec2(TexCoord.x, TexCoord.y);
+  ivec2 uv_flip = ivec2(TexCoord.x, 423 - TexCoord.y);
       
   vec3 a = texelFetch(A, uv).xyz;
   vec3 b = texelFetch(B, uv).xyz;
@@ -133,8 +134,8 @@ void main(void)
     phase_final = true/*(modeMask & 2) != 0*/ ? t11 : t10;
   }
   
-  float zmultiplier = texelFetch(ZTable, uv).x;
-  float xmultiplier = texelFetch(XTable, uv).x;
+  float zmultiplier = texelFetch(ZTable, uv_flip).x;
+  float xmultiplier = texelFetch(XTable, uv_flip).x;
 
   phase_final = 0.0 < phase_final ? phase_final + Params.phase_offset : phase_final;
 

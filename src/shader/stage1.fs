@@ -94,13 +94,14 @@ vec2 processMeasurementTriple(in ivec2 uv, in usampler2DRect p0table, in int off
 void main(void)
 {
   ivec2 uv = ivec2(TexCoord.x, TexCoord.y);
+  ivec2 uv_flip = ivec2(TexCoord.x, 423 - TexCoord.y);
     
   bool valid_pixel = 0.0 < texelFetch(ZTable, uv).x;
   bvec3 saturated = bvec3(valid_pixel);
   
-  vec2 ab0 = processMeasurementTriple(uv, P0Table0, 0, Params.ab_multiplier_per_frq.x, saturated.x);
-  vec2 ab1 = processMeasurementTriple(uv, P0Table1, 3, Params.ab_multiplier_per_frq.y, saturated.y);
-  vec2 ab2 = processMeasurementTriple(uv, P0Table2, 6, Params.ab_multiplier_per_frq.z, saturated.z);
+  vec2 ab0 = processMeasurementTriple(uv_flip, P0Table0, 0, Params.ab_multiplier_per_frq.x, saturated.x);
+  vec2 ab1 = processMeasurementTriple(uv_flip, P0Table1, 3, Params.ab_multiplier_per_frq.y, saturated.y);
+  vec2 ab2 = processMeasurementTriple(uv_flip, P0Table2, 6, Params.ab_multiplier_per_frq.z, saturated.z);
   
 #ifdef MESA_BUGGY_BOOL_CMP
   valid_pixel = valid_pixel ? true : false;
