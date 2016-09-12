@@ -54,6 +54,8 @@ static RgbPacketProcessor *getDefaultRgbPacketProcessor()
   else
     delete tegra;
   return new TurboJpegRgbPacketProcessor();
+#elif defined (LIBFREENECT2_WITH_INTELMEDIASDK_SUPPORT)
+  return new IntelMediaSDKRgbPacketProcessor();
 #elif defined(LIBFREENECT2_WITH_TURBOJPEG_SUPPORT)
   return new TurboJpegRgbPacketProcessor();
 #else

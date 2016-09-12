@@ -260,6 +260,28 @@ IF(TurboJPEG_FOUND)
   )
 ENDIF()
 
+FIND_PACKAGE(IntelMediaSDK)
+
+SET(HAVE_IntelMediaSDK no)
+IF(IntelMediaSDK_FOUND)
+  SET(LIBFREENECT2_WITH_INTELMEDIASDK_SUPPORT 1)
+  SET(HAVE_IntelMediaSDK yes)
+
+  INCLUDE_DIRECTORIES(${IntelMediaSDK_INCLUDE_DIRS})
+
+  LIST(APPEND SOURCES
+    src/intel_media_sdk_jpeg_rgb_packet_processor.cpp
+  )
+
+  LIST(APPEND LIBRARIES
+    ${IntelMediaSDK_LIBRARIES}
+  )
+
+  LIST(APPEND LIBFREENECT2_DLLS
+   ${IntelMediaSDK_DLL}
+  )
+ENDIF()
+
 SET(HAVE_OpenGL disabled)
 IF(ENABLE_OPENGL)
   FIND_PACKAGE(GLFW3)

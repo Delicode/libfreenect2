@@ -93,6 +93,23 @@ private:
 };
 #endif
 
+#ifdef LIBFREENECT2_WITH_INTELMEDIASDK_SUPPORT
+class IntelMediaSDKRgbPacketProcessorImpl;
+
+/** Processor to decode JPEG to image, using TurboJpeg. */
+class IntelMediaSDKRgbPacketProcessor : public RgbPacketProcessor
+{
+public:
+  IntelMediaSDKRgbPacketProcessor();
+  virtual ~IntelMediaSDKRgbPacketProcessor();
+  virtual void process(const libfreenect2::RgbPacket &packet);
+  virtual const char *name() { return "IntelMediaSDK"; }
+private:
+  IntelMediaSDKRgbPacketProcessorImpl *impl_; ///< Decoder implementation.
+};
+#endif
+
+
 #ifdef LIBFREENECT2_WITH_VT_SUPPORT
 class VTRgbPacketProcessorImpl;
 
