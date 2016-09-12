@@ -37,6 +37,7 @@
 #include <mfidl.h>
 #include <Mfreadwrite.h>
 #include <mferror.h>
+#include <chrono>
 
 namespace libfreenect2
 {
@@ -548,11 +549,14 @@ public:
 
   bool processNewFrame(const RgbPacket &packet)
   {
-    LOG_INFO << "processing new frame";
-
     // How much data there is to process in total
     mfx_bitstream.DataLength = packet.jpeg_buffer_length;
     mfx_bitstream.DataFlag = MFX_BITSTREAM_COMPLETE_FRAME;
+    mfx_bitstream.ExtParam = 0;
+    mfx_bitstream.NumExtParam = 0;
+    mfx_bitstream.DecodeTimeStamp = MFX_TIMESTAMP_UNKNOWN;
+    mfx_bitstream.TimeStamp = MFX_TIMESTAMP_UNKNOWN;
+    mfx_bitstream.DataOffset = 0;
 
     // Fill initial chunk of the data. In our case, all of the data
     memcpy(mfx_bitstream.Data, packet.jpeg_buffer, packet.jpeg_buffer_length);
@@ -699,6 +703,8 @@ void IntelMediaSDKRgbPacketProcessor::process(const RgbPacket &packet)
   if (!impl_->initialized || listener_ == 0)
     return;
 
+ // std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+
   if (!impl_->headers_read)
   {
     if (!impl_->prepare(packet))
@@ -718,6 +724,10 @@ void IntelMediaSDKRgbPacketProcessor::process(const RgbPacket &packet)
   {
     impl_->newFrame();
   }
+
+  //std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+  //auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+  //LOG_ERROR << "Duration: " << duration << " us"; 
 }
 
 } /* namespace libfreenect2 */
